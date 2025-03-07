@@ -1,4 +1,3 @@
-
 # API Documentation: User Management System
 
 ## Objective
@@ -54,6 +53,34 @@ Logs in a registered user by verifying email and password, returning an authenti
   "status": 400,
   "error": "Bad Request",
   "message": "Missing required parameters"
+}
+```
+
+#### Logout
+Logs out the authenticated user by invalidating the current authentication token.
+
+**Endpoint:** `POST /api/auth/logout`
+
+**Request Headers:**
+```json
+{
+  "Authorization": "Bearer jwt-token-string"
+}
+```
+
+**Response:**
+```json
+{
+  "message": "User logged out successfully"
+}
+```
+
+**Error Responses:**
+```json
+{
+  "status": 401,
+  "error": "Unauthorized",
+  "message": "Invalid or expired token"
 }
 ```
 
@@ -224,3 +251,4 @@ Permanently removes a user account from the system. Only authorized users can pe
 - The system follows RESTful API design principles.
 - Email uniqueness is enforced at the database level.
 - Only authorized users can update or delete accounts.
+- Logout invalidates the current authentication token and requires re-login for access.
