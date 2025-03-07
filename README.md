@@ -1,1 +1,226 @@
-# test
+
+# API Documentation: User Management System
+
+## Objective
+This document provides structured API documentation for a User Management System, covering authentication, user registration, profile retrieval, updates, and deletion.
+
+## API Endpoints
+
+### 1. User Authentication
+User authentication ensures secure access by validating user credentials and generating a JWT token for session management.
+
+#### Login
+Logs in a registered user by verifying email and password, returning an authentication token for subsequent requests.
+
+**Endpoint:** `POST /api/auth/login`
+
+**Request Headers:**
+```json
+{
+  "Content-Type": "application/json"
+}
+```
+
+**Request Body:**
+```json
+{
+  "email": "user@example.com",
+  "password": "securePassword123"
+}
+```
+
+**Response:**
+```json
+{
+  "token": "jwt-token-string",
+  "user": {
+    "id": 1,
+    "name": "John Doe",
+    "email": "user@example.com"
+  }
+}
+```
+
+**Error Responses:**
+```json
+{
+  "status": 401,
+  "error": "Unauthorized",
+  "message": "Invalid credentials"
+}
+```
+```json
+{
+  "status": 400,
+  "error": "Bad Request",
+  "message": "Missing required parameters"
+}
+```
+
+---
+
+### 2. User Registration
+Allows new users to create an account by providing necessary details such as name, email, and password. Ensures email uniqueness.
+
+#### Register a new user
+**Endpoint:** `POST /api/auth/register`
+
+**Request Body:**
+```json
+{
+  "name": "John Doe",
+  "email": "user@example.com",
+  "password": "securePassword123"
+}
+```
+
+**Response:**
+```json
+{
+  "message": "User registered successfully",
+  "userId": 1
+}
+```
+
+**Error Responses:**
+```json
+{
+  "status": 400,
+  "error": "Bad Request",
+  "message": "Invalid input data"
+}
+```
+```json
+{
+  "status": 409,
+  "error": "Conflict",
+  "message": "Email already exists"
+}
+```
+
+---
+
+### 3. Fetch User Profile
+Retrieves the details of a specific user based on their user ID. Requires authentication.
+
+#### Get user details
+**Endpoint:** `GET /api/users/{id}`
+
+**Headers:**
+```json
+{
+  "Authorization": "Bearer jwt-token-string"
+}
+```
+
+**Response:**
+```json
+{
+  "id": 1,
+  "name": "John Doe",
+  "email": "user@example.com",
+  "createdAt": "2023-05-01T10:00:00Z"
+}
+```
+
+**Error Responses:**
+```json
+{
+  "status": 404,
+  "error": "Not Found",
+  "message": "User does not exist"
+}
+```
+
+---
+
+### 4. Update User Details
+Allows users to update their profile information, such as name and email. Requires authentication.
+
+#### Modify user profile
+**Endpoint:** `PUT /api/users/{id}`
+
+**Request Headers:**
+```json
+{
+  "Authorization": "Bearer jwt-token-string",
+  "Content-Type": "application/json"
+}
+```
+
+**Request Body:**
+```json
+{
+  "name": "John Updated",
+  "email": "newemail@example.com"
+}
+```
+
+**Response:**
+```json
+{
+  "message": "User details updated successfully"
+}
+```
+
+**Error Responses:**
+```json
+{
+  "status": 400,
+  "error": "Bad Request",
+  "message": "Invalid input"
+}
+```
+```json
+{
+  "status": 403,
+  "error": "Forbidden",
+  "message": "Unauthorized access"
+}
+```
+
+---
+
+### 5. Delete User Account
+Permanently removes a user account from the system. Only authorized users can perform this action.
+
+#### Remove a user from the system
+**Endpoint:** `DELETE /api/users/{id}`
+
+**Headers:**
+```json
+{
+  "Authorization": "Bearer jwt-token-string"
+}
+```
+
+**Response:**
+```json
+{
+  "message": "User deleted successfully"
+}
+```
+
+**Error Responses:**
+```json
+{
+  "status": 404,
+  "error": "Not Found",
+  "message": "User not found"
+}
+```
+```json
+{
+  "status": 403,
+  "error": "Forbidden",
+  "message": "Unauthorized access"
+}
+```
+
+---
+
+## Assumptions
+- JWT authentication is used for authorization.
+- The system follows RESTful API design principles.
+- Email uniqueness is enforced at the database level.
+- Only authorized users can update or delete accounts.
